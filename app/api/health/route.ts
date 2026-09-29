@@ -1,0 +1,1 @@
+import {NextResponse} from 'next/server'; export function GET(){return NextResponse.json({ok:true,app:'CleanPro',supabaseConfigured:Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),stripeConfigured:Boolean(process.env.STRIPE_SECRET_KEY)})}

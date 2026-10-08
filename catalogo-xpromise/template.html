@@ -1,0 +1,228 @@
+<title>Catálogo Xpromise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: ficha de proveedor arriba, barra de filtros fija, rejilla de máquinas como hojas de catálogo de taller */
+:root{
+  --bg:#e9ecef; --surface:#ffffff; --ink:#1b2127; --muted:#5d6670; --line:#d3d8dd;
+  --accent:#c4261d; --accent-ink:#ffffff; --hyd:#e0a400; --hyd-ink:#2a2100; --photo:#f4f5f6;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14181c; --surface:#1d2227; --ink:#e7eaed; --muted:#9aa3ad; --line:#2f363d;
+  --accent:#e2493f; --accent-ink:#ffffff; --hyd:#f0b922; --hyd-ink:#241b00; --photo:#f4f5f6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14181c; --surface:#1d2227; --ink:#e7eaed; --muted:#9aa3ad; --line:#2f363d;
+  --accent:#e2493f; --accent-ink:#ffffff; --hyd:#f0b922; --hyd-ink:#241b00; --photo:#f4f5f6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Proveedor */
+.sup{padding-block:28px 20px;display:grid;gap:18px;grid-template-columns:minmax(0,1fr) auto;align-items:end}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 clamp(36px,6vw,64px)/.95 var(--display);margin:8px 0 6px;letter-spacing:.01em;text-wrap:balance}
+.sup p{margin:0;color:var(--muted);max-width:62ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:13px}
+.facts b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+.facts span{color:var(--muted)}
+.contact{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;font-size:13px;display:grid;gap:6px;min-width:0}
+.contact div{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.contact dt{color:var(--muted);width:72px;flex:none}
+.contact dd{margin:0;font-family:var(--mono);user-select:all;overflow-wrap:anywhere}
+.contact a{color:var(--accent);font-weight:600;text-decoration:none}
+@media (max-width:760px){.sup{grid-template-columns:1fr}}
+
+/* Barra de filtros */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:12px;display:grid;gap:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search{flex:1 1 260px;min-width:0;position:relative}
+.search input{width:100%;font:inherit;padding:10px 12px 10px 36px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2}
+select,.toggle{font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.toggle{display:inline-flex;gap:8px;align-items:center;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--accent);margin:0}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.chip{flex:none;font:500 13px/1 var(--body);padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.chip small{font-family:var(--mono);color:var(--muted);margin-left:5px;font-size:11px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.7}
+.count{font-size:13px;color:var(--muted)}
+@media (max-width:700px){.bar{position:static}select,.toggle{flex:1 1 140px;font-size:13px}}
+.count b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+
+/* Rejilla */
+main.wrap{padding-block:18px 48px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;text-align:left;font:inherit;color:inherit;padding:0}
+.card:hover{border-color:var(--muted)}
+.ph{background:var(--photo);aspect-ratio:1;position:relative;max-width:100%}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.tag{position:absolute;left:8px;top:8px;font:600 11px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:5px 7px;border-radius:3px;background:var(--hyd);color:var(--hyd-ink)}
+.no{position:absolute;right:8px;top:8px;font:500 11px/1 var(--mono);color:#5d6670;background:rgba(255,255,255,.85);padding:4px 6px;border-radius:3px}
+.info{padding:11px 12px 13px;display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.cat{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.name{font-weight:600;line-height:1.3;font-size:14px}
+.price{margin-top:auto;padding-top:6px;font:700 22px/1 var(--display);letter-spacing:.01em}
+.price.ask{font-size:17px;color:var(--muted)}
+.meta{font-size:12px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.meta .sold{color:var(--accent);font-weight:600}
+.empty{padding:48px 0;text-align:center;color:var(--muted)}
+
+/* Ficha */
+dialog{border:none;padding:0;border-radius:8px;background:var(--surface);color:var(--ink);width:min(880px,calc(100vw - 24px));max-height:calc(100dvh - 24px)}
+dialog::backdrop{background:rgba(10,12,14,.6)}
+.dlg{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr)}
+.dlg .ph{border-right:1px solid var(--line)}
+.dbody{padding:20px 22px 22px;display:grid;gap:14px;align-content:start;min-width:0}
+.dbody h2{font:700 30px/1 var(--display);margin:0;text-wrap:balance}
+.orig{font-size:12px;color:var(--muted);margin:0}
+.big{font:700 34px/1 var(--display)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:13px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-family:var(--mono);overflow-wrap:anywhere}
+.sec{font:600 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.tiers{display:flex;flex-wrap:wrap;gap:6px}
+.tiers span{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:4px;padding:5px 8px}
+.note{font-size:13px;background:var(--bg);border-radius:6px;padding:10px 12px}
+.note button{font:inherit;color:var(--accent);background:none;border:none;padding:0;cursor:pointer;font-weight:600;text-decoration:underline}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:600 14px/1 var(--body);padding:11px 14px;border-radius:6px;text-decoration:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.x{position:absolute;right:10px;top:10px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer;line-height:1}
+@media (max-width:680px){.dlg{grid-template-columns:1fr}.dlg .ph{border-right:none;border-bottom:1px solid var(--line);max-height:300px}.dlg .ph img{object-fit:contain}}
+footer{font-size:12px;color:var(--muted);padding-block:0 32px}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}}
+</style>
+
+<header class="wrap sup">
+  <div>
+    <div class="eyebrow">Proveedor · Yantai, Shandong, China</div>
+    <h1>Yantai Xpromise Garage Equipment</h1>
+    <p>Catálogo completo de su tienda en Alibaba: equipo para taller automotriz, desde alineadoras y elevadores hasta vulcanizadoras. Precios FOB en dólares tal como aparecen en Alibaba.</p>
+    <div class="facts">
+      <span><b id="fTotal">431</b> productos</span>
+      <span><b>6 años</b> Gold Supplier</span>
+      <span>Fabricante y comercializadora</span>
+      <span>Respuesta <b>≤7 h</b> · tasa <b>87.6%</b></span>
+      <span>Trade Assurance</span>
+    </div>
+  </div>
+  <dl class="contact">
+    <div><dt>WhatsApp</dt><dd>+86 139 6387 0876</dd></div>
+    <div><dt>Correo</dt><dd>tirechangercarlift@gmail.com</dd></div>
+    <div><dt>Web</dt><dd>tirechangercarlift.com</dd></div>
+    <div><dt>Tienda</dt><dd><a href="https://xpromise.en.alibaba.com/productlist.html" target="_blank" rel="noopener">xpromise.en.alibaba.com ↗</a></dd></div>
+  </dl>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="row">
+      <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Buscar: alineadora, 2 postes, XP-A9, camión…" aria-label="Buscar productos"></label>
+      <select id="sort" aria-label="Ordenar">
+        <option value="n">Orden de la tienda</option>
+        <option value="asc">Precio: menor a mayor</option>
+        <option value="desc">Precio: mayor a menor</option>
+        <option value="sold">Más vendidos</option>
+      </select>
+      <label class="toggle"><input id="spec" type="checkbox"> Solo con ficha técnica</label>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Categorías"></div>
+    <div class="count" id="count" aria-live="polite"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" hidden>Ningún producto coincide. Prueba otra palabra o elige «Todas».</div>
+</main>
+<footer class="wrap">Datos tomados de xpromise.en.alibaba.com el 5 de octubre de 2026 (27 páginas, 431 publicaciones). Muchas publicaciones repiten la misma máquina con otro título; confirma modelo, voltaje y precio final con el proveedor antes de comprar. Fichas técnicas completas: 21 modelos representativos.</footer>
+
+<dialog id="dlg" aria-labelledby="dTitle"></dialog>
+
+<script>
+const DATA=/*DATA*/null, IMGS=/*IMGS*/null;
+const P=DATA.products, S=DATA.specs, byId=Object.fromEntries(P.map(p=>[p.id,p]));
+const LABEL=Object.fromEntries(DATA.cats.map(c=>[c.k,c.l]));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const img=id=>"data:image/jpeg;base64,"+IMGS[id];
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+P.forEach(p=>p.hay=norm([p.es,p.t,p.m,LABEL[p.cat],p.p].join(" ")));
+
+let state={cat:"all",q:"",sort:"n",spec:false};
+try{const s=JSON.parse(localStorage.getItem("xp-cat")||"null");if(s)state={...state,...s}}catch(e){}
+function save(){try{localStorage.setItem("xp-cat",JSON.stringify({cat:state.cat,sort:state.sort,spec:state.spec}))}catch(e){}}
+
+function chips(){
+  const all=[{k:"all",l:"Todas",c:P.length},...DATA.cats];
+  $("#chips").innerHTML=all.map(c=>`<button class="chip" data-k="${c.k}" aria-pressed="${state.cat===c.k}">${esc(c.l)}<small>${c.c}</small></button>`).join("");
+}
+function card(p){
+  const price=p.lo==null?`<div class="price ask">${esc(p.p)}</div>`:`<div class="price">${esc(p.p)}</div>`;
+  return `<button class="card" data-id="${p.id}">
+    <div class="ph"><img src="${img(p.id)}" alt="${esc(p.es)}" width="209" height="209" loading="lazy">
+      ${p.spec?'<span class="tag">Ficha técnica</span>':""}<span class="no">#${p.n+1}</span></div>
+    <div class="info"><div class="cat">${esc(LABEL[p.cat])}</div><div class="name">${esc(p.es)}</div>
+      ${price}<div class="meta"><span>Mín. ${esc(p.moq)}</span>${p.m?`<span>${esc(p.m)}</span>`:""}${p.sold?`<span class="sold">${p.sold} vendidos</span>`:""}</div></div>
+  </button>`;
+}
+function render(){
+  const words=norm(state.q).split(/\s+/).filter(Boolean);
+  let list=P.filter(p=>(state.cat==="all"||p.cat===state.cat)&&(!state.spec||p.spec)&&words.every(w=>p.hay.includes(w)));
+  const key=state.sort;
+  if(key==="asc")list.sort((a,b)=>(a.lo??1e9)-(b.lo??1e9));
+  else if(key==="desc")list.sort((a,b)=>(b.hi??-1)-(a.hi??-1));
+  else if(key==="sold")list.sort((a,b)=>b.sold-a.sold||a.n-b.n);
+  $("#grid").innerHTML=list.map(card).join("");
+  $("#empty").hidden=list.length>0;
+  $("#count").innerHTML=`<b>${list.length}</b> de ${P.length} productos`+(state.cat!=="all"?` en ${esc(LABEL[state.cat])}`:"");
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.k===state.cat));
+}
+function open(id){
+  const p=byId[id], s=S[id], r=p.ref&&byId[p.ref];
+  const rows=[["Categoría",LABEL[p.cat]],["Modelo",p.m||"—"],["Pedido mínimo",p.moq],["Vendidos",p.sold||"—"],["Página en la tienda",p.pg]];
+  let spec="";
+  if(s){
+    spec=`<div class="sec">Precio por volumen</div><div class="tiers">${s.tiers.map(t=>`<span>${esc(t)}</span>`).join("")}</div>
+    <div class="sec">Tiempo de entrega</div><div style="font-size:13px">${esc(s.lead)}</div>
+    <div class="sec">Ficha técnica</div><dl class="kv">${s.attrs.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join("")}</dl>`;
+  }else if(r){
+    spec=`<div class="note">No extrajimos la ficha de esta publicación. Tiene la misma categoría y precio que el modelo <b>${esc(r.m||r.es)}</b>, probablemente la misma máquina: <button data-open="${r.id}">ver esa ficha</button>.</div>`;
+  }
+  $("#dlg").innerHTML=`<div class="dlg"><div class="ph"><img src="${img(p.id)}" alt="${esc(p.es)}"></div>
+    <div class="dbody"><div class="eyebrow">${esc(LABEL[p.cat])} · #${p.n+1}</div>
+      <h2 id="dTitle">${esc(p.es)}</h2><p class="orig">En Alibaba: ${esc(p.t)}</p>
+      <div class="big">${esc(p.p)}</div>
+      <dl class="kv">${rows.map(([a,b])=>`<dt>${esc(a)}</dt><dd>${esc(b)}</dd>`).join("")}</dl>
+      ${spec}
+      <div class="actions"><a class="btn pri" href="${esc(p.url)}" target="_blank" rel="noopener">Ver en Alibaba ↗</a>
+      <button class="btn" data-copy="${esc(p.url)}">Copiar enlace</button></div>
+    </div></div><button class="x" aria-label="Cerrar" data-close>×</button>`;
+  const d=$("#dlg"); if(!d.open)d.showModal(); d.scrollTop=0;
+}
+
+chips();
+$("#q").value=state.q; $("#sort").value=state.sort; $("#spec").checked=state.spec;
+$("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;state.cat=b.dataset.k;save();render()});
+$("#q").addEventListener("input",e=>{state.q=e.target.value;render()});
+$("#sort").addEventListener("change",e=>{state.sort=e.target.value;save();render()});
+$("#spec").addEventListener("change",e=>{state.spec=e.target.checked;save();render()});
+$("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)open(c.dataset.id)});
+$("#dlg").addEventListener("click",e=>{
+  const d=$("#dlg");
+  if(e.target===d||e.target.closest("[data-close]"))return d.close();
+  const o=e.target.closest("[data-open]");if(o)return open(o.dataset.open);
+  const c=e.target.closest("[data-copy]");
+  if(c){const t=c.dataset.copy;navigator.clipboard.writeText(t).then(()=>{c.textContent="Enlace copiado"},()=>{c.textContent=t;const r=document.createRange();r.selectNodeContents(c);getSelection().removeAllRanges();getSelection().addRange(r)})}
+});
+render();
+</script>

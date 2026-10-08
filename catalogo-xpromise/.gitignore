@@ -2,3 +2,4 @@ raw/shots/
 raw/sheet_*.png
 raw/check.png
 raw/banner.png
+__pycache__/
